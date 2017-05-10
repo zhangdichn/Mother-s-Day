@@ -1,0 +1,10 @@
+.foreword {
+  position: absolute;
+  bottom: 1rem;
+  left: .5rem;
+}
+.foreword p {
+  color: #4f4f4f;
+  font-size: .32rem;
+  line-height: .48rem;
+}

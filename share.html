@@ -30,6 +30,14 @@
 <!--引入jQuery-->
 <script src="./libs/jquery-1.12.4.min.js"></script>
 <script>
+  $(document).ready(function(){
+    // 绑定页面的resize事件以在变化时更新html的font-size
+    $(window).resize(setFontSize);
+  });
+  // 设置html的font-size
+  function setFontSize() {
+    document.getElementsByTagName('html')[0].style.fontSize = (window.innerWidth / 375) * 100 + 'px';
+  }
 $(".share-button").click(function () {
   $(".modal").css("display","block");
 });

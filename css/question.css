@@ -79,9 +79,11 @@ a{
     width: 0.5rem;
     height: 0.5rem;
     background: transparent;
+    box-shadow: 0rem 0rem 0.1rem #07AEFC;
     border: 0.01rem solid #07AEFC;
     border-radius: 50%;
     position: absolute;
     top: -0.18rem;
     left: 0.2rem;
+    cursor: pointer;
 }

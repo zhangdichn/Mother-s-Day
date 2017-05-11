@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>母亲节活动</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="./css/share.css">
   <link rel="stylesheet" type="text/css" href="./css/reset.css">
 </head>
@@ -37,6 +37,25 @@
   // 设置html的font-size
   function setFontSize() {
     document.getElementsByTagName('html')[0].style.fontSize = (window.innerWidth / 375) * 100 + 'px';
+  }
+  document.addEventListener('touchstart',touch, false);
+  document.addEventListener('touchmove',touch, false);
+  document.addEventListener('touchend',touch, false);
+
+  function touch (event){
+    var event = event || window.event;
+
+    switch(event.type){
+      case "touchstart":
+        window.touchX =  event.touches[0].clientX;
+        break;
+      case "touchend":
+        if((event.changedTouches[0].clientX - window.touchX) > 30) {
+          window.location.href = 'question.html';
+          console.log('后退');
+        }
+        break;
+    }
   }
 $(".share-button").click(function () {
   $(".modal").css("display","block");

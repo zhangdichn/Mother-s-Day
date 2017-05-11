@@ -27,55 +27,6 @@ require(['jquery'], function($) {
 
     getQuestion();
 
-    var list = [{
-            img: 'imgs/heisenberg.png', //图片 
-            info: '弹幕文字信息', //文字 
-            // href:'http://www.yaseng.org', //链接 
-            close: true, //显示关闭按钮 
-            speed: 6, //延迟,单位秒,默认8 
-            // bottom:70, //距离底部高度,单位px,默认随机 
-            color: '#fff', //颜色,默认白色 
-            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-        }, {
-            img: 'imgs/heisenberg.png', //图片 
-            info: '弹幕文字信息', //文字 
-            // href:'http://www.yaseng.org', //链接 
-            close: true, //显示关闭按钮 
-            speed: 6, //延迟,单位秒,默认8 
-            // bottom:70, //距离底部高度,单位px,默认随机 
-            color: '#fff', //颜色,默认白色 
-            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-        }, {
-            img: 'imgs/heisenberg.png', //图片 
-            info: '弹幕文字信息', //文字 
-            // href:'http://www.yaseng.org', //链接 
-            close: true, //显示关闭按钮 
-            speed: 6, //延迟,单位秒,默认8 
-            // bottom:70, //距离底部高度,单位px,默认随机 
-            color: '#fff', //颜色,默认白色 
-            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-        }, {
-            img: 'imgs/heisenberg.png', //图片 
-            info: '弹幕文字信息', //文字 
-            // href:'http://www.yaseng.org', //链接 
-            close: true, //显示关闭按钮 
-            speed: 6, //延迟,单位秒,默认8 
-            // bottom:70, //距离底部高度,单位px,默认随机 
-            color: '#fff', //颜色,默认白色 
-            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-        }, {
-            img: 'imgs/heisenberg.png', //图片 
-            info: '弹幕文字信息', //文字 
-            // href:'http://www.yaseng.org', //链接 
-            close: true, //显示关闭按钮 
-            speed: 6, //延迟,单位秒,默认8 
-            // bottom:70, //距离底部高度,单位px,默认随机 
-            color: '#fff', //颜色,默认白色 
-            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-        },
-
-    ];
-
     $('.answer-btn').click(function() {
         $('.answer-wrap').fadeIn();
         $('#answerInput').focus();
@@ -117,6 +68,7 @@ require(['jquery'], function($) {
 
                 if (data.questionList) {
                     window.questionList = data.questionList;
+                    $('.question-wrap').css('background-image', 'url(' + window.questionList[window.questionIndex].imgUrl + ')')
                     getBarrage();
                 } else if (data.code == -1) {
                     window.location.href = 'index.html';
@@ -127,7 +79,6 @@ require(['jquery'], function($) {
             },
             error: function(data) {
                 console.log('弹幕活动-获取题目error!');
-                console.log(data);
             }
 
         });
@@ -189,26 +140,26 @@ require(['jquery'], function($) {
 
     function showBarrage() {
 
-      var indexBarrage = window.barragerList[window.barragerIndex];
-      var barrager = {
-        img: indexBarrage.imgUrl, //图片 
-        info: indexBarrage.answerContent, //文字 
-        close: false, //显示关闭按钮 
-        color: '#fff', //颜色,默认白色 
-        old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
-      }
-      barrager.speed = 5 + 10 * Math.random();
-      barrager.bottom = 80 + winHeight * Math.random();
-      $('body').barrager(indexBarrage);
+        var indexBarrage = window.barragerList[window.barragerIndex];
+        var barrager = {
+            img: indexBarrage.imgUrl, //图片 
+            info: indexBarrage.answerContent, //文字 
+            close: false, //显示关闭按钮 
+            color: '#fff', //颜色,默认白色 
+            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
+        }
+        barrager.speed = 5 + 10 * Math.random();
+        barrager.bottom = 80 + winHeight * Math.random();
+        $('body').barrager(indexBarrage);
 
-      if(window.barragerIndex < window.barragerList.length - 1) {
-        window.barragerIndex++;
-        window.showBarrageClock = setTimeout(function() {
-          showBarrage()
-        }, 1000);
-      } else {
-        getBarrage();
-      }
+        if (window.barragerIndex < window.barragerList.length - 1) {
+            window.barragerIndex++;
+            window.showBarrageClock = setTimeout(function() {
+                showBarrage()
+            }, 1000);
+        } else {
+            getBarrage();
+        }
 
     }
 
@@ -261,23 +212,27 @@ require(['jquery'], function($) {
                 window.touchX = event.touches[0].clientX;
                 break;
             case "touchend":
-                if ((event.changedTouches[0].clientX - window.touchX) > 30) {
-                  if(window.questionIndex < window.questionList.length) {
-                    console.log('下一张');
-                    window.questionIndex++;
-                    getQuestion();
-                  } else {
-                    window.location.href = 'share.html';
-                  }
-                } else if ((event.changedTouches[0].clientX - window.touchX) < -30) {
-                    console.log('上一张');
+                if ((event.changedTouches[0].clientX - window.touchX) < -30) {
+                    if (window.questionIndex < window.questionList.length) {
+                        // console.log('下一张');
+                        window.questionIndex++;
+                        getQuestion();
+                    } else {
+                        window.location.href = 'share.html';
+                    }
+                } else if ((event.changedTouches[0].clientX - window.touchX) > 30) {
+                    // console.log('上一张');
                 }
                 break;
-            case "touchmove":
-                // event.preventDefault();
-                // window.touchX = event.touches[0].clientX; 
-                break;
         }
+    }
+
+    setFontSize();
+
+    $(window).resize(setFontSize);
+
+    function setFontSize() {
+        document.getElementsByTagName('html')[0].style.fontSize = (window.innerWidth / 375) * 100 + 'px';
     }
 
 

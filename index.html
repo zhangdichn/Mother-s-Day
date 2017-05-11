@@ -23,6 +23,24 @@
     $(window).resize(setFontSize);
     checkLogin(); // 获取用户登录信息
   });
+  document.addEventListener('touchstart',touch, false);
+  document.addEventListener('touchmove',touch, false);
+  document.addEventListener('touchend',touch, false);
+
+  function touch (event){
+    var event = event || window.event;
+
+    switch(event.type){
+      case "touchstart":
+        window.touchX =  event.touches[0].clientX;
+        break;
+      case "touchend":
+        if((window.touchX - event.changedTouches[0].clientX) > 30) {
+          window.location.href = 'question.html';
+        }
+        break;
+    }
+  }
   // 设置html的font-size
   function setFontSize() {
     document.getElementsByTagName('html')[0].style.fontSize = (window.innerWidth / 375) * 100 + 'px';

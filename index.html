@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>母亲节活动</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="./css/index.css">
   <link rel="stylesheet" type="text/css" href="./css/reset.css">
 </head>
@@ -21,6 +21,7 @@
   $(document).ready(function(){
     // 绑定页面的resize事件以在变化时更新html的font-size
     $(window).resize(setFontSize);
+    checkLogin(); // 获取用户登录信息
   });
   // 设置html的font-size
   function setFontSize() {

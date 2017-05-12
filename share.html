@@ -21,6 +21,15 @@
   <p>她是这个世界上最爱你的人</p>
 </section>
 <div class="share-button">分享给朋友</div>
+<div class="play-video">点此播放视频</div>
+<video
+        id="myvideo"
+        src="https://pub.cdn.oss.chuangkit.com/video/mothers_day_960_540.mp4"
+        controls="controls"
+        autoplay="autoplay"
+>
+  您的浏览器不支持 video 标签。
+</video>
 <div class="modal">
   <div class="share-tip-container">
     <span class="pointer-icon">👆</span>
@@ -30,6 +39,43 @@
 <!--引入jQuery-->
 <script src="./libs/jquery-1.12.4.min.js"></script>
 <script>
+  $(".play-video").click(function () { // 全屏播放视频
+    $("#myvideo").css('display','block');
+    var elem = document.getElementById("myvideo");
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  });
+  // 侦听全屏事件
+  var myvideo = document.getElementById("myvideo");
+  document.addEventListener("fullscreenchange", function () {
+    if(!document.fullscreen) {
+      $("#myvideo").css('display','none');
+    }
+  }, false);
+
+  document.addEventListener("mozfullscreenchange", function () {
+    if(!document.mozFullScreen) {
+      $("#myvideo").css('display','none');
+    }
+  }, false);
+
+  document.addEventListener("webkitfullscreenchange", function() {
+    if(!document.fullScreen) {
+      $("#myvideo").css('display','none');
+    }
+  },false);
+
+  document.addEventListener("MSFullscreenChange", function () {
+    if(!document.MSFullscreenElement) {
+      $("#myvideo").css('display','none');
+    }
+  }, false);
+
   $(document).ready(function(){
     // 绑定页面的resize事件以在变化时更新html的font-size
     $(window).resize(setFontSize);

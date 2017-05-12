@@ -1,77 +1,5 @@
 require(['jquery', 'b', 'barrager'], function($, b, barrager) {
 
-    // // ajax预处理
-    // $.ajaxPrefilter("json jsonp", function( options, originalOptions, jqXHR ) {
-
-    //     if(options.url.indexOf("//") != -1){
-    //         return;
-    //     }
-    //     var rquestion = /\?/;
-
-    //     if(window.api) {
-            
-    //         options.url = global_config.APIDOMAIN+options.url+ ( rquestion.test( options.url ) ? "&" : "?" ) + "_dataType="+originalOptions.dataType+"&api=1" + "&accessId=" + window.access_id;
-
-    //     } else {
-        
-    //         options.url = global_config.APIDOMAIN+options.url+ ( rquestion.test( options.url ) ? "&" : "?" ) + "_dataType="+originalOptions.dataType;
-
-    //         if(window.d_et != undefined) {
-    //           options.url+= '&d_et=' + window.d_et;
-    //         }
-
-    //         if(window.d_cd != undefined) {
-    //           options.url+= '&d_cd=' + window.d_cd;
-    //         }
-
-    //     }
-        
-    //     options.xhrFields={
-    //         withCredentials: true
-    //     };
-    //     options.crossDomain=true;
-    //     var client_succes = originalOptions.success;
-
-    //     options.success = function(response, textStatus) {
-
-    //         response = eval(response);
-    //         var header = response.header;
-    //         var body = response.body;
-
-    //         if (header.code == 1) {
-
-    //             if ($.isFunction(client_succes))
-
-    //                 client_succes(body, textStatus);
-
-    //         } else {
-
-    //             if (originalOptions.error) {
-
-    //                 originalOptions.error(response);
-
-    //             } else {
-
-    //                 var msg = header.msg ? header.msg : header.EXCE;
-
-    //                 if (console && console.log) {
-    //                     // console.log(msg);
-    //                 }
-
-    //             }
-
-    //         }
-
-    //         if (originalOptions.all) {
-
-    //             originalOptions.all(response);
-
-    //         }
-
-    //     };
-
-    // });
-
     // 获取用户登录信息
     $.ajax({
         url: "/user/getUserInfo.do",
@@ -96,8 +24,13 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
 
     getQuestion();
 
+    $('.mask').click(function() {
+        $(this).fadeOut();
+        $('.answer-wrap').fadeOut();
+    });
+
     $('.answer-btn').click(function() {
-        $('.answer-wrap').fadeIn();
+        $('.answer-wrap, .mask').fadeIn();
         $('#answerInput').focus();
     });
 
@@ -120,6 +53,7 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
     $('#answerInput').keypress(function(event) {
         if (event.keyCode == 13) {
             $(this).next().click();
+            $(this).blur();
         }
     });
 
@@ -136,6 +70,12 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
                     window.questionList = data.questionList;
                     $('.question-wrap').css('background-image', 'url(' + window.questionList[window.questionIndex].imgUrl + ')')
                     getBarrage();
+                    var $img,
+                        $body = $('body');
+                    for (var i = 0; i < window.questionList.length; i++) {
+                        $img = $('<img src="' + window.questionList[i].imgUrl + '" class="hide" />');
+                        $body.append($img);
+                    }
                 } else if (data.code == -1) {
                     window.location.href = 'index.html';
                 } else if (data.code == -2) {
@@ -203,7 +143,13 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
 
     }
 
-    var winHeight = document.documentElement.clientHeight;
+    var winHeight = document.documentElement.clientHeight,
+        speedIndex = 0;
+        speedList = [
+            'slow-speed',
+            'mid-speed',
+            'high-speed'
+        ];
 
     function showBarrage() {
 
@@ -213,11 +159,16 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
             info: indexBarrage.answerContent, //文字 
             close: false, //显示关闭按钮 
             href:'javascript:void(0);', //链接 
-            color: '#fff', //颜色,默认白色 
+            color: '#000', //颜色,默认白色 
             old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
+            bottom: parseInt(80 + (winHeight - 180) * Math.random()),
+            speedClass: speedList[speedIndex]
         }
-        barrager.speed = 5 + 10 * Math.random();
-        barrager.bottom = 80 + (winHeight - 180) * Math.random();
+        speedIndex++;
+        if(speedIndex > 2) {
+            speedIndex = 0;
+        }
+
         $('body').barrager(barrager);
 
         window.showBarrageClock = setTimeout(function() {
@@ -228,7 +179,7 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
                 clearTimeout(window.showBarrageClock);
                 getBarrage();
             }
-        }, 1000);
+        }, 1100);
 
     }
 
@@ -236,9 +187,16 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
 
         var $barrage = $('.barrage');
 
-        $barrage.fadeOut(300, function() {
-            $barrage.remove()
+        $barrage.each(function() {
+            var $this = $(this);
+            $this.stop();
+            $this.animate({
+                opacity : 0
+            }, 800, function() {
+                $this.remove();
+            });
         });
+
     }
 
     function saveAnswer(answer) {
@@ -260,13 +218,13 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
                         info: answer, //文字 
                         close: false, //显示关闭按钮 
                         href:'javascript:void(0);', //链接 
-                        speed: 8, //延迟,单位秒,默认8 
                         bottom: winHeight - 60, //距离底部高度,单位px,默认随机
                         color: '#07AFEC', //颜色,默认白色 
                         old_ie_color: '#07AFEC', //ie低版兼容色,不能与网页背景相同,默认黑色 
+                        speedClass: 'mid-speed'
                     };
                     $('body').barrager(answerBarrage);
-                    $('.answer-wrap').fadeOut();
+                    $('.answer-wrap, .mask').fadeOut();
                     $('#answerInput').val('');
                 } else if (data.code == -2) {
                     window.location.href = 'index.html';
@@ -294,7 +252,8 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
                 window.touchX = event.touches[0].clientX;
                 break;
             case "touchend":
-                if ((event.changedTouches[0].clientX - window.touchX) < -30) {
+                if ((event.changedTouches[0].clientX - window.touchX) < -15) {
+                    hideBarrage();
                     window.questionIndex++;
                     if (window.questionIndex < window.questionList.length) {
                         // console.log('下一张');
@@ -305,25 +264,28 @@ require(['jquery', 'b', 'barrager'], function($, b, barrager) {
                     } else {
                         window.location.href = 'share.html';
                     }
+                } else if ((event.changedTouches[0].clientX - window.touchX) > 15) {
                     hideBarrage();
-                } else if ((event.changedTouches[0].clientX - window.touchX) > 30) {
                     window.questionIndex--;
-                    if (window.questionIndex > 0) {
+                    if (window.questionIndex >= 0) {
                         $('.question-wrap').css('background-image', 'url(' + window.questionList[window.questionIndex].imgUrl + ')');
                         $('.answer-wrap').val('').fadeOut().next().removeClass('active');
                         clearTimeout(window.showBarrageClock);
                         getBarrage();
                     } else {
                         window.location.href = 'index.html';
-                        hideBarrage();
                     }
                     // console.log('上一张');
                 }
+                break;
+            case "touchmove":
+                event.preventDefault();
                 break;
         }
     }
 
     setFontSize();
+    $('body').css('min-height', winHeight + 'px');
 
     $(window).resize(setFontSize);
 

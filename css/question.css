@@ -11,6 +11,7 @@ body {
     font: 14px/1.2 -apple-system,PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Helvetica Neue,sans-serif;
     text-rendering: optimizeLegibility;
     height: 100%;
+    overflow: hidden;
 }
 input, textarea, keygen, select, button {
     font: 14px/1.2 -apple-system,PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Helvetica Neue,sans-serif;
@@ -72,6 +73,8 @@ a{
     height: 0.4rem;
     background-color: #F8F8F8;
     display: none;
+    z-index: 11;
+    position: absolute;
 }
 
 .answer-wrap input {
@@ -110,10 +113,11 @@ a{
     line-height: 0.5rem;
     text-align: center;
     color: #FFF;
-    background: linear-gradient(to top, #C2C2C2, #FFF);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0));
     position: fixed;
     left: 0px;
     bottom: 0px;
+    opacity: 0.8;
 }    
 .answer-btn {
     width: 0.5rem;
@@ -126,4 +130,23 @@ a{
     top: -0.18rem;
     left: 0.2rem;
     cursor: pointer;
+}
+.mask {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+    display: none;
+}
+.hide {
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    z-index: -10;
 }

@@ -1,5 +1,8 @@
 body {
   text-align: center;
+  background-image: url("../imgs/curtain_bg.png");
+  background-position: center center;
+  background-size: cover;
 }
 p {
   color: #4f4f4f;
@@ -7,12 +10,25 @@ p {
   line-height: .24rem;
 }
 .first-section {
-  margin-top: 1.5rem;
+  width: 80%;
+  margin: 0 auto;
+  height: 1.5rem;
+  background-image: url("../imgs/first_paragraph.svg");
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .second-section {
+  width: 95%;
+  margin: 0 auto;
+  height: 1.5rem;
   margin-top: .25rem;
+  background-image: url("../imgs/sec_paragraph.svg");
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-.share-button {
+#share-button {
   display: inline-block;
   width: 1.775rem;
   height: .475rem;
@@ -23,23 +39,6 @@ p {
   color: #fff;
   background-color: #4f4f4f;
   border-radius: .04rem;
-}
-.play-video {
-  display: inline-block;
-  width: 1.775rem;
-  height: .475rem;
-  line-height: .475rem;
-  margin-top: .4rem;
-  font-size: .16rem;
-  text-align: center;
-  color: #fff;
-  background-color: #4f4f4f;
-  border-radius: .04rem;
-  display: block;
-  margin: .3rem auto;
-}
-#myvideo {
-  display: none;
 }
 .modal {
   display: none;
